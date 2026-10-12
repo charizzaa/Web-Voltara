@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voltara – Baterai Kendaraan Listrik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM Sans:wght@300;500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#05070c;--navy:#0a1f44;--navy2:#102a5c;--ice:#8fb8ff;--white:#fff;--paper:#f4f6fa;--ink:#0b1220;--mute:#5b6577;--line:#d9dee8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#0b1220;--ink:#eef2fa;--mute:#9aa6bd;--line:#1f2b44}}
+:root[data-theme="dark"]{--paper:#0b1220;--ink:#eef2fa;--mute:#9aa6bd;--line:#1f2b44}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.6 'DM Sans',system-ui,sans-serif}
+h1,h2,h3{font-family:'DM Sans',system-ui,sans-serif;line-height:1.08;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(1.9rem,4.2vw,3.2rem);font-weight:700}
+p{margin:0}a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.view{display:none}.view.on{display:block}
+:focus-visible{outline:3px solid var(--ice);outline-offset:3px}
+/* nav */
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:rgba(5,7,12,.72);backdrop-filter:blur(14px);color:#fff}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font:800 1.35rem 'Sora',sans-serif;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{width:26px;height:14px;border:2px solid #fff;border-radius:3px;position:relative;display:block}
+.logo i::before{content:"";position:absolute;inset:2px 8px 2px 2px;background:var(--ice)}
+.logo i::after{content:"";position:absolute;right:-5px;top:3px;width:3px;height:4px;background:#fff}
+nav ul{display:flex;gap:30px;list-style:none;margin:0;padding:0}
+nav a{text-decoration:none;font-weight:500;font-size:.95rem;opacity:.85}
+nav a:hover,nav a.cur{opacity:1}
+.btn{display:inline-block;padding:14px 28px;border-radius:999px;font:700 .95rem 'DM Sans',sans-serif;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.b-w{background:#fff;color:var(--black)}.b-o{border-color:rgba(255,255,255,.55);color:#fff}.b-n{background:var(--navy);color:#fff}
+.menu{display:none;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer}
+@media(max-width:820px){.menu{display:block}nav ul{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--black);padding:8px 24px 20px}nav ul.open{display:flex}nav li{padding:12px 0;border-bottom:1px solid #1b2436}}
+/* slider */
+.slider{position:relative;height:100svh;min-height:600px;background:var(--black);color:#fff;overflow:hidden}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .9s,visibility .9s;display:flex;align-items:center}
+.slide.on{opacity:1;visibility:visible}
+.slide .bg{position:absolute;inset:0}
+.s1 .bg{background:radial-gradient(90% 70% at 78% 40%,#17408c 0,transparent 60%),linear-gradient(120deg,var(--black),var(--navy))}
+.s2 .bg{background:radial-gradient(80% 80% at 20% 90%,#1a3f86 0,transparent 55%),linear-gradient(200deg,var(--navy),var(--black))}
+.s3 .bg{background:radial-gradient(70% 70% at 85% 15%,#2a5cb8 0,transparent 55%),linear-gradient(160deg,#000,var(--navy2))}
+.slide .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;width:100%}
+.slide h1{font-size:clamp(2.5rem,6.4vw,5.4rem);font-weight:800}
+.slide p.lead{margin:22px 0 34px;max-width:46ch;font-size:1.12rem;color:#c3cde0}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.cell{width:100%;max-width:420px;justify-self:center;filter:drop-shadow(0 30px 60px rgba(40,100,255,.35))}
+.slide.on h1,.slide.on .lead,.slide.on .ctas{animation:rise .8s both}
+.slide.on .lead{animation-delay:.12s}.slide.on .ctas{animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.ctrl{position:absolute;left:0;right:0;bottom:36px;z-index:5}
+.ctrl .wrap{display:flex;align-items:center;gap:14px}
+.dot{flex:0 0 64px;height:4px;background:rgba(255,255,255,.25);border:0;padding:0;cursor:pointer;position:relative;overflow:hidden}
+.dot span{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left}
+.dot.on span{animation:fill 6s linear forwards}
+@keyframes fill{to{transform:scaleX(1)}}
+.arr{margin-left:auto;display:flex;gap:10px}
+.arr button{width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);background:none;color:#fff;font-size:1.1rem;cursor:pointer}
+.arr button:hover{background:#fff;color:#000}
+@media(max-width:820px){.slide .wrap{grid-template-columns:1fr;padding-top:70px}.cell{max-width:200px;order:-1}.arr{display:none}.dot{flex:1}.slide p.lead{font-size:1rem;margin:16px 0 24px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.dot.on span{transform:scaleX(1)}}
+/* sections */
+section{padding:clamp(64px,9vw,120px) 0}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:center}
+.split p{color:var(--mute);margin-top:18px;max-width:52ch}
+.stack{display:grid;gap:0;border-top:1px solid var(--line)}
+.stack div{display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.stack b{font:700 1.05rem 'DM Sans',sans-serif}.stack span{color:var(--mute);text-align:right}
+.dark{background:var(--navy);color:#fff}
+.dark .sub{color:#b4c1da;max-width:56ch;margin-top:14px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:30px}
+.card svg{width:34px;height:34px;stroke:var(--ice);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;margin-bottom:22px}
+.card h3{font-size:1.2rem;margin-bottom:10px}.card p{color:#b4c1da;font-size:.97rem}
+.light .card{background:var(--paper);border-color:var(--line)}.light .card svg{stroke:var(--navy)}.light .card p{color:var(--mute)}
+.band{background:var(--black);color:#fff;text-align:center}
+.band h2{max-width:20ch;margin:0 auto 18px}.band p{color:#aab6cf;margin-bottom:32px}
+.band .ctas{justify-content:center}
+.contact{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,6vw,80px)}
+.contact ul{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:18px;color:var(--mute)}
+.contact li b{display:block;color:var(--ink)}
+form{display:grid;gap:16px}
+label{font-weight:500;font-size:.92rem;display:grid;gap:6px}
+input,textarea,select{font:inherit;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);width:100%}
+textarea{min-height:120px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ok{display:none;padding:14px 16px;border-radius:12px;background:#e3f0ff;color:var(--navy);font-weight:500}
+footer{background:var(--black);color:#8e9ab2;padding:40px 0;font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+/* product page */
+.phero{background:radial-gradient(70% 90% at 80% 50%,#17408c 0,transparent 60%),linear-gradient(130deg,var(--black),var(--navy));color:#fff;padding:150px 0 90px}
+.phero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.phero h1{font-size:clamp(2.4rem,6vw,5rem);font-weight:800}
+.phero p{margin:22px 0 32px;color:#c3cde0;max-width:48ch;font-size:1.1rem}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);background:var(--navy2);color:#fff}
+.facts div{padding:30px 24px;border-right:1px solid rgba(255,255,255,.12)}
+.facts b{display:block;font:700 clamp(1.5rem,3vw,2.2rem) 'DM Sans',sans-serif}.facts span{color:#aebcd8;font-size:.9rem}
+.tbl{width:100%;border-collapse:collapse;margin-top:36px}
+.tbl th,.tbl td{text-align:left;padding:16px 12px;border-bottom:1px solid var(--line)}
+.tbl th{font:700 .95rem 'DM Sans',sans-serif}.tbl td:first-child{font-weight:500}.tbl .hl{color:var(--navy);font-weight:700}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tbl .hl{color:var(--ice)}}
+.scroll{overflow-x:auto}
+@media(max-width:900px){.split,.contact,.phero .wrap{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.facts div{border-bottom:1px solid rgba(255,255,255,.12)}.phero .cell{max-width:240px}.row{grid-template-columns:1fr}.phero{padding-top:120px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+<a class="logo">Voltara</a>
+<nav aria-label="Utama"><ul id="nl">
+<li><a href="#/" data-r="home">Beranda</a></li>
+<li><a href="#/produk" data-r="produk">Produk</a></li>
+<li><a href="#/" data-go="kontak">Kontak</a></li>
+<li><a class="btn b-w" style="padding:9px 20px" href="#/" data-go="kontak">Minta Penawaran</a></li>
+</ul></nav>
+<button class="menu" id="mb" aria-label="Buka menu">☰</button>
+</div></header>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="cell" viewBox="0 0 220 300"><rect x="70" y="8" width="80" height="22" rx="5" fill="#8fb8ff"/><rect x="20" y="30" width="180" height="262" rx="26" fill="#0e2a5e" stroke="#8fb8ff" stroke-width="3"/><g fill="#1f4fae"><rect x="40" y="52" width="140" height="42" rx="8"/><rect x="40" y="104" width="140" height="42" rx="8"/><rect x="40" y="156" width="140" height="42" rx="8"/></g><rect x="40" y="208" width="140" height="42" rx="8" fill="#8fb8ff"/><path d="M118 98l-30 52h22l-8 44 34-58h-22z" fill="#fff"/></symbol></defs></svg>
+
+<main>
+<!-- LANDING -->
+<div class="view" id="v-home">
+<div class="slider" id="sl" aria-roledescription="carousel" aria-label="Sorotan Voltara">
+<div class="slide s1 on"><div class="bg"></div><div class="wrap"><div>
+<h1>Tenaga bersih untuk setiap perjalanan</h1>
+<p class="lead">Voltara Solid-Core 100, baterai kendaraan listrik terbaru kami. Jarak tempuh lebih jauh, pengisian lebih cepat, dan usia pakai lebih panjang.</p>
+<div class="ctas"><a class="btn b-w" href="#/produk">Lihat Produk</a><a class="btn b-o" href="#/" data-go="kontak">Hubungi Kami</a></div></div>
+<svg class="cell" aria-hidden="true"><use href="#cell"/></svg></div></div>
+<div class="slide s2"><div class="bg"></div><div class="wrap"><div>
+<h1>Isi daya 10–80% dalam 15 menit</h1>
+<p class="lead">Waktu berhenti lebih singkat membuat armada, taksi online, dan kendaraan pribadi bisa kembali ke jalan lebih cepat.</p>
+<div class="ctas"><a class="btn b-w" href="#/produk">Lihat Keunggulan</a></div></div>
+<svg class="cell" aria-hidden="true"><use href="#cell"/></svg></div></div>
+<div class="slide s3"><div class="bg"></div><div class="wrap"><div>
+<h1>Dibuat untuk bumi yang lebih bersih</h1>
+<p class="lead">Kobalt minimal, sel dapat didaur ulang hingga 95%, dan diproduksi dengan energi terbarukan.</p>
+<div class="ctas"><a class="btn b-w" href="#/" data-go="kontak">Minta Penawaran</a></div></div>
+<svg class="cell" aria-hidden="true"><use href="#cell"/></svg></div></div>
+<div class="ctrl"><div class="wrap" id="dots"></div></div>
+</div>
+
+<section id="info"><div class="wrap split">
+<div><h2>Satu baterai, untuk motor sampai bus</h2>
+<p>Voltara Solid-Core 100 adalah paket baterai modular untuk produsen kendaraan listrik, operator armada, dan bengkel konversi. Anda memilih kapasitas, kami menyiapkan sistem manajemen baterai yang cocok dengan kendaraan Anda.</p>
+<div class="ctas" style="margin-top:28px"><a class="btn b-n" href="#/produk">Pelajari Produk</a></div></div>
+<div class="stack">
+<div><b>Kapasitas</b><span>40 – 120 kWh, modular</span></div>
+<div><b>Jarak tempuh</b><span>hingga 720 km (siklus WLTP)</span></div>
+<div><b>Garansi</b><span>8 tahun / 1.000.000 km</span></div>
+<div><b>Sertifikasi</b><span>UN 38.3 · IEC 62660</span></div></div>
+</div></section>
+
+<section class="dark"><div class="wrap">
+<h2>Mengapa memilih Voltara?</h2>
+<p class="sub">Tiga alasan utama mitra kami beralih ke Voltara Solid-Core 100.</p>
+<div class="cards">
+<div class="card"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><h3>Pengisian Cepat</h3><p>Pengisian 10–80% dalam 15 menit pada pengisi daya cepat 350 kW.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg><h3>Aman</h3><p>Elektrolit padat tidak mudah terbakar dan tahan suhu tinggi.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg><h3>Ramah Lingkungan</h3><p>Daur ulang sel hingga 95% dan jejak karbon produksi 40% lebih rendah.</p></div>
+</div></div></section>
+
+<section class="band"><div class="wrap">
+<h2>Siap mengganti baterai kendaraan Anda?</h2>
+<p>Tim kami membantu menghitung kapasitas dan biaya yang sesuai kebutuhan Anda.</p>
+<div class="ctas"><a class="btn b-w" href="#/" data-go="kontak">Minta Penawaran</a><a class="btn b-o" href="#/produk">Lihat Spesifikasi</a></div>
+</div></section>
+
+<section id="kontak"><div class="wrap contact">
+<div><h2>Bicara dengan tim kami</h2>
+<ul><li><b>Alamat</b>Jl. Industri Hijau No. 8, Cikarang, Bekasi</li>
+<li><b>Telepon</b>+62 21 5000 1234</li>
+<li><b>Email</b>sales@voltara.example</li>
+<li><b>Jam kerja</b>Senin–Jumat, 08.00–17.00 WIB</li></ul></div>
+<form id="cf">
+<div class="row"><label>Nama<input required name="n" autocomplete="name"></label><label>Perusahaan<input name="c" autocomplete="organization"></label></div>
+<label>Email<input type="email" required name="e" autocomplete="email"></label>
+<label>Kebutuhan<select><option>Baterai untuk sepeda motor</option><option>Baterai untuk mobil</option><option>Baterai untuk bus / armada</option><option>Lainnya</option></select></label>
+<label>Pesan<textarea name="m"></textarea></label>
+<button class="btn b-n" type="submit">Kirim Permintaan</button>
+<div class="ok" id="ok" role="status">Terima kasih. Tim kami akan menghubungi Anda dalam 1 hari kerja.</div>
+</form></div></section>
+</div>
+
+<!-- PRODUK -->
+<div class="view" id="v-produk">
+<div class="phero"><div class="wrap"><div>
+<h1>Voltara Solid-Core 100</h1>
+<p>Baterai solid-state hibrida generasi terbaru: lebih padat energi, lebih aman, dan dirancang untuk bertahan sepanjang usia kendaraan.</p>
+<div class="ctas"><a class="btn b-w" href="#/" data-go="kontak">Minta Penawaran</a><a class="btn b-o" href="#spek" data-sc="spek">Lihat Spesifikasi</a></div></div>
+<svg class="cell" aria-hidden="true"><use href="#cell"/></svg></div></div>
+<div class="facts"><div><b>720 km</b><span>jarak tempuh</span></div><div><b>15 menit</b><span>isi 10–80%</span></div><div><b>400 Wh/kg</b><span>kepadatan energi</span></div><div><b>8 tahun</b><span>garansi</span></div></div>
+
+<section class="light"><div class="wrap">
+<h2>Keunggulan Voltara Solid-Core 100</h2>
+<div class="cards">
+<div class="card"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><h3>Energi lebih padat</h3><p>400 Wh/kg, 35% lebih tinggi dari baterai lithium-ion biasa, sehingga lebih ringan.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><h3>Pengisian ultra-cepat</h3><p>Tambah jarak sekitar 500 km hanya dengan 15 menit di pengisi daya 350 kW.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg><h3>Keamanan berlapis</h3><p>Elektrolit padat tidak mudah terbakar, ditambah sensor suhu pada setiap modul.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>Usia pakai panjang</h3><p>Lebih dari 4.000 siklus pengisian dengan kapasitas tersisa minimal 80%.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><path d="M14 14.5V5a3 3 0 0 0-6 0v9.5a5 5 0 1 0 6 0Z"/></svg><h3>Suhu ekstrem</h3><p>Bekerja stabil dari -20°C sampai 60°C, cocok untuk iklim tropis maupun pegunungan.</p></div>
+<div class="card"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg><h3>Daur ulang 95%</h3><p>Kobalt minimal dan program ambil-kembali baterai bekas untuk didaur ulang.</p></div>
+</div></div></section>
+
+<section class="dark" id="spek"><div class="wrap">
+<h2>Spesifikasi dan perbandingan</h2>
+<div class="scroll"><table class="tbl" style="color:#fff">
+<thead><tr><th></th><th class="hl" style="color:var(--ice)">Solid-Core 100</th><th>Lithium-ion umum</th></tr></thead>
+<tbody>
+<tr><td>Kepadatan energi</td><td class="hl" style="color:var(--ice)">400 Wh/kg</td><td>250–300 Wh/kg</td></tr>
+<tr><td>Kapasitas</td><td class="hl" style="color:var(--ice)">40–120 kWh</td><td>40–100 kWh</td></tr>
+<tr><td>Waktu isi 10–80%</td><td class="hl" style="color:var(--ice)">15 menit</td><td>30–45 menit</td></tr>
+<tr><td>Siklus pengisian</td><td class="hl" style="color:var(--ice)">4.000+</td><td>1.500–2.000</td></tr>
+<tr><td>Suhu operasi</td><td class="hl" style="color:var(--ice)">-20 – 60°C</td><td>0 – 45°C</td></tr>
+<tr><td>Garansi</td><td class="hl" style="color:var(--ice)">8 tahun / 1 juta km</td><td>8 tahun / 160.000 km</td></tr>
+</tbody></table></div></div></section>
+
+<section class="band"><div class="wrap">
+<h2>Uji Solid-Core 100 di kendaraan Anda.</h2>
+<p>Kami menyediakan unit uji untuk mitra manufaktur dan operator armada.</p>
+<div class="ctas"><a class="btn b-w" href="#/" data-go="kontak">Jadwalkan uji coba</a></div>
+</div></section>
+</div>
+</main>
+
+<footer><div class="wrap"><span>© 2026 Voltara Energy. Semua hak dilindungi.</span><span>Data spesifikasi bersifat contoh.</span></div></footer>
+
+<script>
+(function(){
+var views={home:document.getElementById('v-home'),produk:document.getElementById('v-produk')};
+var pendingGo=null;
+function route(){
+  var h=location.hash,k=h.indexOf('produk')>-1?'produk':'home';
+  for(var v in views)views[v].classList.toggle('on',v===k);
+  document.querySelectorAll('nav a[data-r]').forEach(function(a){a.classList.toggle('cur',a.dataset.r===k)});
+  document.title=k==='produk'?'Produk – Voltara Solid-Core 100':'Voltara – Baterai Kendaraan Listrik';
+  if(pendingGo&&k==='home'){var t=document.getElementById(pendingGo);pendingGo=null;if(t)setTimeout(function(){t.scrollIntoView()},30)}
+  else window.scrollTo(0,0);
+  if(k==='home')play();else stop();
+  document.getElementById('nl').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  var a=e.target.closest('a');if(!a)return;
+  if(a.dataset.go){pendingGo=a.dataset.go;if(location.hash==''||location.hash==='#/'){e.preventDefault();document.getElementById(pendingGo).scrollIntoView({behavior:'smooth'});pendingGo=null;document.getElementById('nl').classList.remove('open')}}
+  if(a.dataset.sc){e.preventDefault();document.getElementById(a.dataset.sc).scrollIntoView({behavior:'smooth'})}
+});
+document.getElementById('mb').onclick=function(){document.getElementById('nl').classList.toggle('open')};
+// slider
+var sl=document.getElementById('sl'),slides=sl.querySelectorAll('.slide'),dots=document.getElementById('dots'),i=0,timer=null;
+slides.forEach(function(s,n){var b=document.createElement('button');b.className='dot';b.setAttribute('aria-label','Slide '+(n+1));b.innerHTML='<span></span>';b.onclick=function(){go(n)};dots.appendChild(b)});
+var ar=document.createElement('div');ar.className='arr';ar.innerHTML='<button aria-label="Sebelumnya">←</button><button aria-label="Berikutnya">→</button>';dots.appendChild(ar);
+ar.children[0].onclick=function(){go(i-1)};ar.children[1].onclick=function(){go(i+1)};
+function go(n){i=(n+slides.length)%slides.length;slides.forEach(function(s,k){s.classList.toggle('on',k===i)});
+  dots.querySelectorAll('.dot').forEach(function(d,k){d.classList.remove('on');if(k===i){void d.offsetWidth;d.classList.add('on')}});play()}
+function play(){stop();timer=setInterval(function(){go(i+1)},6000)}
+function stop(){clearInterval(timer)}
+sl.addEventListener('mouseenter',stop);sl.addEventListener('mouseleave',function(){if(views.home.classList.contains('on'))play()});
+var tx=0;sl.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+sl.addEventListener('touchend',function(e){var d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(i+(d<0?1:-1))});
+dots.querySelector('.dot').classList.add('on');
+// form
+document.getElementById('cf').addEventListener('submit',function(e){e.preventDefault();document.getElementById('ok').style.display='block';this.reset()});
+window.addEventListener('hashchange',route);route();
+})();
+</script>
+</body>
+</html>
